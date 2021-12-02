@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fuzzyblog.johnnywww.online</id>
     <title>johnnywww&apos;s fuzzy blog</title>
-    <updated>2021-12-02T09:34:31.005Z</updated>
+    <updated>2021-12-02T09:49:32.006Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fuzzyblog.johnnywww.online"/>
     <link rel="self" href="https://fuzzyblog.johnnywww.online/atom.xml"/>
@@ -10,6 +10,29 @@
     <logo>https://fuzzyblog.johnnywww.online/images/avatar.png</logo>
     <icon>https://fuzzyblog.johnnywww.online/favicon.ico</icon>
     <rights>All rights reserved 2021, johnnywww&apos;s fuzzy blog</rights>
+    <entry>
+        <title type="html"><![CDATA[自动化接口测试之Postman（一篇搞定）]]></title>
+        <id>https://fuzzyblog.johnnywww.online/post/zi-dong-hua-jie-kou-ce-shi-zhi-postmanyi-pian-gao-ding/</id>
+        <link href="https://fuzzyblog.johnnywww.online/post/zi-dong-hua-jie-kou-ce-shi-zhi-postmanyi-pian-gao-ding/">
+        </link>
+        <updated>2021-12-02T09:35:29.000Z</updated>
+        <content type="html"><![CDATA[<p><em><strong>Postman 最被低估的功能，自动化接口测试效率简直无敌！</strong></em><br>
+该篇文章针对已经掌握 Postman 基本用法的读者，即对接口相关概念有一定了解、已经会使用 Postman 进行模拟请求的操作。<br>
+当前环境：</p>
+<ul>
+<li>Window 7 - 64</li>
+<li>Postman 版本（免费版）：Chrome App v5.5.3</li>
+</ul>
+<p>不同版本页面 UI 和部分功能位置会有点不同，不过影响不大。<br>
+我们先思考一下，如果需要达到自动化接口测试的效果，那么我们在基本的模拟请求上还需要做哪些呢？<br>
+以下我粗略概括为 3 个问题（欢迎更多补充与建议）：</p>
+<ul>
+<li>如何判断接口是否请求成功</li>
+<li>如何进行接口批量、定期测试</li>
+<li>如何处理依赖接口问题（比如商品下单的接口必须要求先登录）</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
         <id>https://fuzzyblog.johnnywww.online/post/hello-gridea/</id>
