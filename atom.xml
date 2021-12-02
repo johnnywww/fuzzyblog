@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fuzzyblog.johnnywww.online</id>
     <title>johnnywww&apos;s fuzzy blog</title>
-    <updated>2021-12-02T09:49:32.006Z</updated>
+    <updated>2021-12-02T09:58:00.743Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fuzzyblog.johnnywww.online"/>
     <link rel="self" href="https://fuzzyblog.johnnywww.online/atom.xml"/>
@@ -29,7 +29,15 @@
 <ul>
 <li>如何判断接口是否请求成功</li>
 <li>如何进行接口批量、定期测试</li>
-<li>如何处理依赖接口问题（比如商品下单的接口必须要求先登录）</li>
+<li>如何处理依赖接口问题（比如商品下单的接口必须要求先登录）<br>
+所以，接下来就主要分为 3 个部分进行介绍，以分别解决这 3 个问题。<br>
+<strong>接口结果判断</strong><br>
+首先，既然是自动化测试，那么我们肯定需要工具 (Postman) 或者代码能帮我们直接判断结果是否符合预期。那么在接口测试上，大体就两个思路：</li>
+</ul>
+<ul>
+<li>判断请求返回的 code 是否符合预期</li>
+<li>判断请求返回的内容中是否包含预期的内容（关键字）<br>
+接下来我们看看如何利用 Postman 来解决上述的问题：</li>
 </ul>
 ]]></content>
     </entry>

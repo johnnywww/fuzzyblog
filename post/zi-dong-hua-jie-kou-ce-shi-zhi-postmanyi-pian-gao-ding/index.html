@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>自动化接口测试之Postman（一篇搞定） | johnnywww&#39;s fuzzy blog</title>
-<link rel="shortcut icon" href="https://fuzzyblog.johnnywww.online/favicon.ico?v=1638438567067">
+<link rel="shortcut icon" href="https://fuzzyblog.johnnywww.online/favicon.ico?v=1638438942901">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fuzzyblog.johnnywww.online/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="自动化接口测试之Postman（一篇搞定） | johnnywww&#39;s fuzzy blog - Atom Feed" href="https://fuzzyblog.johnnywww.online/atom.xml">
@@ -17,7 +17,7 @@
 
 Window 7 - 64
 Po..." />
-    <meta name="keywords" content="" />
+    <meta name="keywords" content="测试" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -26,7 +26,7 @@ Po..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://fuzzyblog.johnnywww.online">
-  <img class="avatar" src="https://fuzzyblog.johnnywww.online/images/avatar.png?v=1638438567067" alt="">
+  <img class="avatar" src="https://fuzzyblog.johnnywww.online/images/avatar.png?v=1638438942901" alt="">
   </a>
   <h1 class="site-title">
     johnnywww&#39;s fuzzy blog
@@ -86,8 +86,12 @@ Po..." />
                 2021-12-02
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
+              
+                <a href="https://fuzzyblog.johnnywww.online/tag/VdAKHGU9e/" class="post-tag">
+                  # 测试
+                </a>
               
             </div>
             
@@ -106,7 +110,15 @@ Po..." />
 <ul>
 <li>如何判断接口是否请求成功</li>
 <li>如何进行接口批量、定期测试</li>
-<li>如何处理依赖接口问题（比如商品下单的接口必须要求先登录）</li>
+<li>如何处理依赖接口问题（比如商品下单的接口必须要求先登录）<br>
+所以，接下来就主要分为 3 个部分进行介绍，以分别解决这 3 个问题。<br>
+<strong>接口结果判断</strong><br>
+首先，既然是自动化测试，那么我们肯定需要工具 (Postman) 或者代码能帮我们直接判断结果是否符合预期。那么在接口测试上，大体就两个思路：</li>
+</ul>
+<ul>
+<li>判断请求返回的 code 是否符合预期</li>
+<li>判断请求返回的内容中是否包含预期的内容（关键字）<br>
+接下来我们看看如何利用 Postman 来解决上述的问题：</li>
 </ul>
 
               </div>
