@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fuzzyblog.johnnywww.online</id>
     <title>johnnywww&apos;s fuzzy blog</title>
-    <updated>2021-12-03T02:11:10.127Z</updated>
+    <updated>2021-12-03T02:43:18.833Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fuzzyblog.johnnywww.online"/>
     <link rel="self" href="https://fuzzyblog.johnnywww.online/atom.xml"/>
@@ -94,10 +94,108 @@ tests[&quot;Response time is less than 200ms&quot;] = responseTime &lt; 200;
 </code></pre>
 <p>以上介绍的这些基本已经足够完成对单一接口的测试了，但我们知道如果没有批量、定时任务, 那么这些都将毫无意义，继续…</p>
 <ul>
-<li>集合(批量)测试<br>
+<li>
+<p>集合(批量)测试<br>
 想要进行接口的批量测试、管理，那么我们需要将待测试的接口全部都保存到同一个集合（Collections）中，你可以认为就是保存到同一个文件夹中。先看看 Postman 中的操作步骤：<br>
-<img src="https://fuzzyblog.johnnywww.online/post-images/1638495877699.png" alt="" loading="lazy"></li>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638495877699.png" alt="" loading="lazy"></p>
+<p>通过以上步骤，我们得到一个待测的接口集合，为了简化情况，我这边每个接口成功与否的条件都是用 code 是否为 200 来判断：<br>
+<code>tests[&quot;Status code is 200&quot;] = responseCode.code === 200;</code></p>
+</li>
 </ul>
+<ul>
+<li>批量执行<br>
+以上准备就绪后，我们就可以开始批量运行接口进行测试了：</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://fuzzyblog.johnnywww.online/post-images/1638497707096.png" alt="" loading="lazy"></figure>
+<p>点击Run 后，会新打开一个页面：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638498081754.png" alt="" loading="lazy"></p>
+<ul>
+<li>Environment ：用于切换接口运行的环境，这里先不管，后面再讲</li>
+<li>Iteration ：用于设置接口一共要运行的次数。</li>
+<li>Delay : 设置每次运行接口之间的时间间隔，单位为毫秒。</li>
+<li>Data File : 上传测试数据文件 （下文单独讲）</li>
+</ul>
+<p>** 变化的参数数据 **<br>
+我们已经了解了，如何让多个接口循环运行多次，但是现在有个问题，按目前这个步骤，每次运行时接口的参数都是一样的，那么就算我们运行个100次、1000次意义也不大。</p>
+<p>先看看我们写好的一个登录功能的接口：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638498227285.png" alt="" loading="lazy"></p>
+<p>** 使用变量 **<br>
+现在登录的账号和密码参数都是写死的，也就是不过我们执行多少次，都是拿这个账号去测试。</p>
+<p>那么如果想要测试账号密码参数使用其它值有没有异常怎么办呢？（ 想要每次都手动改的可以跳过这部分 /手动滑稽）这里我们先简单讲一下在 Postman 中使用如何“变量”，如下图：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638498550384.png" alt="" loading="lazy"><br>
+引用一个变量的语法：{{变量名}}， 图中可以看到，我们将账户和密码字段的参数值都设置为变量：{{username}}、{{password}} 。修改完直接点击运行 （Send） 当然是不行的，因为目前这两个变量还未被赋值，不过我们可以在 Pre-request Script 面板中进行赋值操作：</p>
+<p>** Pre-request Script **<br>
+Pre-request Script 与 Tests 类似，区别在于：Pre-request Script 中的脚本是在执行请求之前运行，而Tests 中的脚本则是在请求完成之后执行。所以，我们可以在 Pre-request Script 功能区中用脚本先个上面两个变量进行赋值，如:</p>
+<pre><code>//设置全局变量
+postman.setGlobalVariable(&quot;username&quot;, &quot;test1&quot;);
+postman.setGlobalVariable(&quot;password&quot;, &quot;123456&quot;);
+</code></pre>
+<p>但是用 Pre-request Script 进行赋值操作仍然不能解决我们的问题，因为按照这种写法，不论运行多少次其实都还是用固定（写死）的数据进行测试。当然既然是脚本语言，也会有更灵活的用法，这边先不将。</p>
+<p>** 测试数据集 **<br>
+接下来我们讲讲 Data File , 在运行集合前的这个选项就是用来上传测试数据（文件）以赋值给相应变量的。我们先以 CSV 格式的测试数据为例：</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">username</th>
+<th style="text-align:center">password</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">test1</td>
+<td style="text-align:center">123456</td>
+</tr>
+<tr>
+<td style="text-align:center">test2</td>
+<td style="text-align:center">222222</td>
+</tr>
+<tr>
+<td style="text-align:center">test3</td>
+<td style="text-align:center">123456</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>数据格式类似表格，第一行表示对应的变量名，下面 4 行表示 4 组账号密码数据（其中两组为正确数据） ，我们保存一份内容为上述示例数据后缀名为.csv 的文件后，再次开始测试看看效果，我们选择运行次数为 4 （对应 4 组测试数据）、选择对应的 CSV 文件运行后，可以看到我们的结果确实如我们的预期。</p>
+<p>接口 Request 运行的结果为两次成功两次失败，也就是每一次运行都赋值了不同的账号密码的测试数据 （在最新的桌面客户端版本中可以看到每次具体的请求情况，这边就不再细说了）。</p>
+<p>如果使用 Json 文件的话，那么格式如下：</p>
+<pre><code>[
+  {
+    &quot;username&quot;: &quot;test1&quot;,
+    &quot;password&quot;: &quot;123456&quot;
+  },
+  {
+    &quot;username&quot;: &quot;test2&quot;,
+    &quot;password&quot;: &quot;222222&quot;
+  },
+  {
+    &quot;username&quot;: &quot;test3&quot;,
+    &quot;password&quot;: &quot;123456&quot;
+  },
+  {
+    &quot;username&quot;: &quot;test4&quot;,
+    &quot;password&quot;: &quot;444444&quot;
+  }
+]
+</code></pre>
+<p><strong>定期任务</strong><br>
+Postman 提供了一个 Monitors (监视器)功能，支持我们提交一个测试任务，按照设置的定时器进行运行，如每小时测试一次，具体操作如下：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638499201105.png" alt="" loading="lazy"></p>
+<p><em><strong>请求依赖问题</strong></em><br>
+讲完接口结果判断和集合批量测试后，我们再来看看比较复杂的情况，即依赖请求问题，比如我们的购物下订单接口要求必须先登录后才可访问。但大部分依赖问题其实本质上就是一个接口间数据传递的问题，比如调用登录接口后返回一个标识，假设为 token ，那么我们请求下订单接口时只要一起携带 token 参数进行请求即可。所以，问题变为：</p>
+<ul>
+<li>保证接口调用顺序</li>
+<li>将接口A返回的数据传递给后续的接口B、C、D</li>
+</ul>
+<p><em><strong>接口执行顺序</strong></em><br>
+首先，说明一下，接下来说的接口都是默认属于同一个集合 (Collections) 中的。</p>
+<p>还是以我们上文中创建好接口集合为例，如果你有注意我们执行批量测试的结果，就会发现接口的执行顺序其实就是按照这边目录中的顺序（从上到下），即：Request1 -&gt; Request2 -&gt; Request3。<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638499363103.png" alt="" loading="lazy"></p>
+<blockquote>
+<p>这边接口名字可能有点误导性，所以再强调一下：按目录中从上到下的顺序执行 （与字典排序无关）<br>
+所以有了这个默认的执行顺序后，那么我们便可以把需要优先执行的接口放前面即可，比如把“登录接口”放在第一个。</p>
+</blockquote>
 ]]></content>
     </entry>
     <entry>
