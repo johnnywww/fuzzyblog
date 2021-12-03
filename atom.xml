@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fuzzyblog.johnnywww.online</id>
     <title>johnnywww&apos;s fuzzy blog</title>
-    <updated>2021-12-03T03:30:49.023Z</updated>
+    <updated>2021-12-03T05:53:25.641Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fuzzyblog.johnnywww.online"/>
     <link rel="self" href="https://fuzzyblog.johnnywww.online/atom.xml"/>
@@ -11,12 +11,13 @@
     <icon>https://fuzzyblog.johnnywww.online/favicon.ico</icon>
     <rights>All rights reserved 2021, johnnywww&apos;s fuzzy blog</rights>
     <entry>
-        <title type="html"><![CDATA[自动化接口测试之Postman（一篇搞定）]]></title>
+        <title type="html"><![CDATA[自动化接口测试之Postman（一篇搞定）(转载）]]></title>
         <id>https://fuzzyblog.johnnywww.online/post/zi-dong-hua-jie-kou-ce-shi-zhi-postmanyi-pian-gao-ding/</id>
         <link href="https://fuzzyblog.johnnywww.online/post/zi-dong-hua-jie-kou-ce-shi-zhi-postmanyi-pian-gao-ding/">
         </link>
         <updated>2021-12-02T09:35:29.000Z</updated>
-        <content type="html"><![CDATA[<p><em><strong>Postman 最被低估的功能，自动化接口测试效率简直无敌！</strong></em><br>
+        <content type="html"><![CDATA[<p><a href="https://mp.weixin.qq.com/s/K-WM5oTIh1a7FmFQ5hZC0Q">转载于</a><br>
+<em><strong>Postman 最被低估的功能，自动化接口测试效率简直无敌！</strong></em><br>
 该篇文章针对已经掌握 Postman 基本用法的读者，即对接口相关概念有一定了解、已经会使用 Postman 进行模拟请求的操作。<br>
 当前环境：</p>
 <ul>
@@ -194,8 +195,97 @@ Postman 提供了一个 Monitors (监视器)功能，支持我们提交一个测
 <img src="https://fuzzyblog.johnnywww.online/post-images/1638499363103.png" alt="" loading="lazy"></p>
 <blockquote>
 <p>这边接口名字可能有点误导性，所以再强调一下：按目录中从上到下的顺序执行 （与字典排序无关）<br>
-所以有了这个默认的执行顺序后，那么我们便可以把需要优先执行的接口放前面即可，比如把“登录接口”放在第一个。</p>
+所以有了这个默认的执行顺序后，那么我们便可以把需要优先执行的接口放前面即可，比如把“登录接口”放在第一个。<br>
+<strong>自定义执行顺序</strong></p>
 </blockquote>
+<p>当然，如果只有默认的一个执行顺序的话，通常没法满足我们复杂的业务需求，所以 Postman 为我们提供了一个函数：postman.setNextRequest(&quot;填写你要跳转的接口名&quot;) ，支持我们跳转到指定接口继续执行，举个例子：</p>
+<p>我们在运行完 Request1 接口成功后，不需要再运行 Request2 而是直接跳至 Request3 ，那么我可以在 Request1 接口的 Tests 功能区中执行跳转代码，如：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638510324512.png" alt="" loading="lazy"><br>
+这里需要注意几点：</p>
+<ul>
+<li>
+<p>postman.setNextRequest() 只在运行集合测试的时候生效，也就是说我们单独运行 (Send) 接口Request1 时，函数是不起作用的。</p>
+</li>
+<li>
+<p>当我们运行集合测试成功从 Request1 -&gt; Request3 后，如果 Request3 后面还有接口，那么后面的接口仍然继续按默认顺序执行，即图中的接口 Request4 仍会被执行。</p>
+</li>
+<li>
+<p>指定的跳转接口必须属于同一个集合中。</p>
+</li>
+<li>
+<p>setNextRequest() 函数不管在 Tests 脚本中何处被调用，它都只在当前脚本最后才被真正执行。比如我们将图中的第二行与第一行互调后，那么在运行跳转函数后第二行代码仍会被执行。</p>
+</li>
+</ul>
+<p>所以，利用 setNextRequest() 函数，我们便可以按照条件跳过不必要的接口，或者建立我们自己的一个逻辑测试。</p>
+<p><em><strong>数据传递</strong></em><br>
+在讲数据传递前，先聊聊 Postman 中全局变量、环境切换的使用。</p>
+<p><strong>全局变量</strong></p>
+<p>全局变量的概念其实我们在上文中讲 Pre-request Script 时有简单提到，也就是说我们可以通过脚本代码来设置全局变量。</p>
+<p>运行后，username 和 password 两个变量会被成功保存下来，那么我们在任意接口中便都可以通过变量引用的语法如：{{username}} 来使用它们。</p>
+<p>另外，Postman 不仅支持代码设置全局变量的方式，它还支持可视化操作：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638510399234.png" alt="" loading="lazy"><br>
+进入对应界面后，便可直接进行管理：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638510415948.png" alt="" loading="lazy"><br>
+<strong>多环境区分与切换</strong></p>
+<p>通常情况下，我们的接口都会分为测试版本和线上版本（或者更多），而他们的区别可能仅是 ULR 不同，那么全局变量便不大合适解决这个问题。</p>
+<p><strong>参数的创建</strong></p>
+<p>可能你已经注意到，上图中我已经建有几个不同环境的参数“集合”了，再看一下：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638510453957.png" alt="" loading="lazy"><br>
+我在每个环境中都创建了一个 host 参数，如：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638510467678.png" alt="" loading="lazy"><br>
+当然，我们的环境参数也可以通过脚本的方式来进行设置，函数为：</p>
+<pre><code>//注意，该参数只添加到你当前选择的环境的“参数集”中
+postman.setEnvironmentVariable(&quot;variable_key&quot;, &quot;variable_value&quot;);
+</code></pre>
+<p><strong>使用与切换</strong></p>
+<p>环境“参数集” 中的参数使用方式和全局变量一致，如图中 {{host}}，不同环境的切换见下图：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638510508438.png" alt="解决依赖问题" loading="lazy"><br>
+掌握以上的预备知识后，我们开始看看如何用 Postman 解决存在依赖关系的接口测试。</p>
+<p><strong>假设场景</strong></p>
+<p>我们的接口 Request1 为登录接口，登录成功将会返回一个 access_token 字段作为标识（已实现）。那么假设接口 Request3 为一个下订单的接口，需要携带登录返回的 access_token 才能正常访问。</p>
+<p><strong>思路</strong></p>
+<p>保证 Request1 在 Request3 之前被运行<br>
+将 Request1 返回的 access_token 的值添加到环境变量&quot;参数集&quot;中。<br>
+Request3 在请求时引用 access_token 的值<br>
+将返回值存在 “全局变量” 或者 “环境变量” 中，视具体业务情况而定，该例中 access_token 的值是与环境有关的，所以这里选择使用环境变量集存储。</p>
+<p><strong>Postman 中的操作</strong></p>
+<ol>
+<li>
+<p>我们目录中已保证 Request1 接口优先执行</p>
+</li>
+<li>
+<p>Request1 中 Tests 的代码情况：</p>
+</li>
+</ol>
+<pre><code>if(responseCode.code === 200 &amp;&amp; responseBody.has(&quot;access_token&quot;)){
+    //如果 code 为 200， 并且返回的数据中存在 access_token 关键字，则认为登录成功
+    tests[&quot;login&quot;] = true;
+    
+    //将返回的内容转为 json 格式，并且取到 access_token 内容，添加到环境变量中
+    var jsonData = JSON.parse(responseBody);
+    //access_token的取值方式视具体的 json 数据结构而定
+    postman.setEnvironmentVariable(&quot;token&quot;,jsonData.result.access_token);
+
+    //跳转到 Request3 接口
+    postman.setNextRequest(&quot;Request3&quot;)
+    
+}else{
+    tests[&quot;login&quot;] = false;
+    
+    //登录失败，可以选择跳转到对应失败后的处理接口进行测试
+    //postman.setNextRequest(&quot;Other Request&quot;)
+}
+</code></pre>
+<ol start="3">
+<li>在接口 Request3 中使用变量 token :<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638510635564.png" alt="" loading="lazy"></li>
+</ol>
+<blockquote>
+<p>我这边是将 token 放在头部信息中， 具体使用方式时接口参数规则而定。<br>
+<strong>运行</strong></p>
+</blockquote>
+<p>运行集合测试，结果符合我们的预期，Request1 和 Request3 通过测试，Request2 被跳过，Request4 仍被执行。</p>
+<p><a href="blog.csdn.net/cai_iac/article/details/81030619">来源</a></p>
 ]]></content>
     </entry>
     <entry>
