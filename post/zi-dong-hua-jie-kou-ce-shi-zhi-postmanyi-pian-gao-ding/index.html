@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>自动化接口测试之Postman（一篇搞定） | johnnywww&#39;s fuzzy blog</title>
-<link rel="shortcut icon" href="https://fuzzyblog.johnnywww.online/favicon.ico?v=1638493343660">
+<link rel="shortcut icon" href="https://fuzzyblog.johnnywww.online/favicon.ico?v=1638495894893">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fuzzyblog.johnnywww.online/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="自动化接口测试之Postman（一篇搞定） | johnnywww&#39;s fuzzy blog - Atom Feed" href="https://fuzzyblog.johnnywww.online/atom.xml">
@@ -26,7 +26,7 @@ Po..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://fuzzyblog.johnnywww.online">
-  <img class="avatar" src="https://fuzzyblog.johnnywww.online/images/avatar.png?v=1638493343660" alt="">
+  <img class="avatar" src="https://fuzzyblog.johnnywww.online/images/avatar.png?v=1638495894893" alt="">
   </a>
   <h1 class="site-title">
     johnnywww&#39;s fuzzy blog
@@ -86,7 +86,7 @@ Po..." />
                 2021-12-02
               </span>
               <span>
-                2 min read
+                5 min read
               </span>
               
                 <a href="https://fuzzyblog.johnnywww.online/tag/VdAKHGU9e/" class="post-tag">
@@ -120,7 +120,64 @@ Po..." />
 <li>判断请求返回的内容中是否包含预期的内容（关键字）<br>
 接下来我们看看如何利用 Postman 来解决上述的问题：<br>
 ** 功能区 **<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_png/eQPyBffYbufFVD73Mhn3G7uuOQXBddWqicBU4RXkHQfP1dMTNSdb2n57iaiaGqSIdvCK2CMtOvRCtuTpOCRLnOSBA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="" loading="lazy"></li>
+<img src="https://mmbiz.qpic.cn/mmbiz_png/eQPyBffYbufFVD73Mhn3G7uuOQXBddWqicBU4RXkHQfP1dMTNSdb2n57iaiaGqSIdvCK2CMtOvRCtuTpOCRLnOSBA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="" loading="lazy"><br>
+在 Postman 中相关的功能在非常显眼的地方，Tests 功能的使用需要我们有一定的编程语言基础，目前支持的脚本语言即为 JavaScript 。但比较好的一点是，我们不需要再去考虑上下文问题以及运行环境的问题 ，也就是说我们只需要在这边完成结果逻辑判断的代码块即可。</li>
+</ul>
+<p>而 Postman 还为我们提供了一些常用的代码模板，在 Tests 面板右边的 SNIPPETS 功能区中，所以对 JavaScript 不大了解问题也不大。代码编写相关将在下文进行具体介绍。</p>
+<p><strong>脚本相关</strong><br>
+先看上图的代码部分，我们可以发现 responseCode 、 responseBody 和 tests 三个变量（可直接使用）：</p>
+<ul>
+<li>responseCode ：包含请求的返回的状态信息(如：code)</li>
+<li>responseBody：为接口请求放回的数据内容（类型为字符串）</li>
+<li>tests ：为键值对形式，用于表示我们的测试结果是成功与否，最终展示在 Test Results 中。</li>
+</ul>
+<ul>
+<li>key ：（如：code 200）我们可以用来当做结果的一个描述</li>
+<li>value：其值为布尔型，ture 表示测试通过， false 表示测试失败。<br>
+所以上述代码应该不难理解了，而有了返回结果的数据以及表示结果成功与否的方式，那么我们“接口结果判断”的问题也就基本解决了。</li>
+</ul>
+<p>另外还有几个比较常用的：</p>
+<ul>
+<li>responseTime ：请求所耗时长</li>
+<li>postman ：可以做的比较多，比如
+<ul>
+<li>获取返回数据的头部信息：postman.getResponseHeader(&quot;&quot;)</li>
+<li>设置全局变量：postman.setGlobalVariable(&quot;variable_key&quot;, &quot;variable_value&quot;);<br>
+<strong>代码模板</strong><br>
+Postman 在 SNIPPETS 功能区中为我们提供的代码模板已经能解决大部分情况了，以下先挑几个跟结果判断相关的进行讲解：<br>
+Status code : Code is 200</li>
+</ul>
+</li>
+</ul>
+<pre><code>//根据返回的 Code 判断请求情况
+tests[&quot;Status code is 200&quot;] = responseCode.code === 200;
+</code></pre>
+<p>Response body: Contains string</p>
+<pre><code>//判断返回的内容中是否存在“关键字”。（tests 的 key 可修改，将不再强调）
+tests[&quot;Body matches string&quot;] = responseBody.has(&quot;这里可以改为你要判断的关键字内容&quot;);
+
+//如上文提到的：
+// 判断结果中是否存在 access_token 关键字
+tests[&quot;has access_token&quot;] = responseBody.has(&quot;access_token&quot;);
+</code></pre>
+<p>Response body: is equal to string</p>
+<pre><code>//判断返回内容是否跟预期完全相等。
+tests[&quot;Body is correct&quot;] = responseBody === &quot;这里可以改为你的预期内容&quot;;
+</code></pre>
+<p>Response body: JSON value check</p>
+<pre><code>//上文提到，responseBody 为字符串类型，支持转为 Json 格式
+var jsonData = JSON.parse(responseBody);
+tests[&quot;Your test name&quot;] = jsonData.value === 100;
+</code></pre>
+<p>Response time is less than 200ms</p>
+<pre><code>//判断请求时长是否小于200ms ,具体时长按情况自定义
+tests[&quot;Response time is less than 200ms&quot;] = responseTime &lt; 200;
+</code></pre>
+<p>以上介绍的这些基本已经足够完成对单一接口的测试了，但我们知道如果没有批量、定时任务, 那么这些都将毫无意义，继续…</p>
+<ul>
+<li>集合(批量)测试<br>
+想要进行接口的批量测试、管理，那么我们需要将待测试的接口全部都保存到同一个集合（Collections）中，你可以认为就是保存到同一个文件夹中。先看看 Postman 中的操作步骤：<br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638495877699.png" alt="" loading="lazy"></li>
 </ul>
 
               </div>
