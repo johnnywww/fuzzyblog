@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://fuzzyblog.johnnywww.online</id>
     <title>johnnywww&apos;s fuzzy blog</title>
-    <updated>2021-12-03T02:08:43.915Z</updated>
+    <updated>2021-12-03T02:10:26.631Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://fuzzyblog.johnnywww.online"/>
     <link rel="self" href="https://fuzzyblog.johnnywww.online/atom.xml"/>
@@ -39,7 +39,7 @@
 <li>判断请求返回的内容中是否包含预期的内容（关键字）<br>
 接下来我们看看如何利用 Postman 来解决上述的问题：<br>
 ** 功能区 **<br>
-<img src="file:///C:/Users/PC01/Desktop/YinXiangBiJi.enex_files/Image.png" alt="" loading="lazy"><br>
+<img src="https://fuzzyblog.johnnywww.online/post-images/1638497416934.png" alt="" loading="lazy"><br>
 在 Postman 中相关的功能在非常显眼的地方，Tests 功能的使用需要我们有一定的编程语言基础，目前支持的脚本语言即为 JavaScript 。但比较好的一点是，我们不需要再去考虑上下文问题以及运行环境的问题 ，也就是说我们只需要在这边完成结果逻辑判断的代码块即可。</li>
 </ul>
 <p>而 Postman 还为我们提供了一些常用的代码模板，在 Tests 面板右边的 SNIPPETS 功能区中，所以对 JavaScript 不大了解问题也不大。代码编写相关将在下文进行具体介绍。</p>
